@@ -43,39 +43,6 @@ class CustomizeListdom {
     }
     
     /**
-     * Enqueue Select2 CSS and JS
-     */
-    public function enqueue_scripts() {
-        // Enqueue Select2 CSS
-        // wp_enqueue_style(
-        //     'select2-css',
-        //     'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
-        //     array(),
-        //     '4.1.0'
-        // );
-        
-        // Enqueue custom CSS
-        // wp_enqueue_style(
-        //     'customize-ui-css',
-        //     CUSTOMIZE_UI_PLUGIN_URL . 'assets/css/customize-ui.css',
-        //     array('select2-css'),
-        //     CUSTOMIZE_UI_VERSION
-        // );
-        
-        // Enqueue jQuery (if not already loaded)
-        // wp_enqueue_script('jquery');
-        
-        // Enqueue Select2 JS
-        // wp_enqueue_script(
-        //     'select2-js',
-        //     'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-        //     array('jquery'),
-        //     '4.1.0',
-        //     true
-        // );
-    }
-    
-    /**
      * Enqueue admin scripts and styles
      */
     public function admin_enqueue_scripts($hook) {
@@ -86,39 +53,21 @@ class CustomizeListdom {
             return;
         }
         
-        // Enqueue Select2 CSS
-        wp_enqueue_style(
-            'select2-css',
-            'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
-            array(),
-            '4.1.0'
-        );
-        
         // Enqueue custom CSS
         wp_enqueue_style(
             'customize-ui-css',
             CUSTOMIZE_UI_PLUGIN_URL . 'assets/css/customize-ui.css',
-            array('select2-css'),
+            array(),
             CUSTOMIZE_UI_VERSION
         );
         
-        // Enqueue jQuery
-        wp_enqueue_script('jquery');
-        
-        // Enqueue Select2 JS
-        wp_enqueue_script(
-            'select2-js',
-            'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-            array('jquery'),
-            '4.1.0',
-            true
-        );
+       
         
         // Enqueue admin script
         wp_enqueue_script(
             'customize-ui-admin',
             CUSTOMIZE_UI_PLUGIN_URL . 'assets/js/admin.js',
-            array('jquery', 'select2-js'),
+            array('jquery'),
             CUSTOMIZE_UI_VERSION,
             true
         );
@@ -129,29 +78,7 @@ class CustomizeListdom {
      */
     public function add_script() {
         ?>
-        <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            // Initialize Select2 on elements with class "listdom-category"
-            $('.listdom-category').select2({
-                placeholder: 'Select an option...',
-                allowClear: true,
-                width: '100%',
-                theme: 'classic'
-            });
-            
-            // Handle dynamic content (if elements are added after page load)
-            $(document).on('DOMNodeInserted', function(e) {
-                if ($(e.target).hasClass('listdom-category') || $(e.target).find('.listdom-category').length) {
-                    $(e.target).find('.listdom-category').select2({
-                        placeholder: 'Select an option...',
-                        allowClear: true,
-                        width: '100%',
-                        theme: 'classic'
-                    });
-                }
-            });
-        });
-        </script>
+
         <?php
     }
     
@@ -299,4 +226,4 @@ class CustomizeListdom {
 new CustomizeListdom();
 
 // Include migration script
-require_once CUSTOMIZE_UI_PLUGIN_PATH . 'migrate-categories.php';
+// require_once CUSTOMIZE_UI_PLUGIN_PATH . 'migrate-categories.php';
