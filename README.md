@@ -62,6 +62,20 @@ echo display_listdom_categories($post_id, ', ');
 
 The admin interface remains the same - you can still select multiple categories using the Select2 dropdown in the meta box on listdom-listing posts.
 
+## Map Marker Customization
+
+The plugin also customizes map markers to use your logo instead of category icons:
+
+- **Custom Logo**: Map markers now display your logo (`assets/images/icon-logo.png`) instead of category icons
+- **Consistent Branding**: All map markers use the same logo for consistent branding
+- **Proper Styling**: Custom CSS ensures the logo displays properly on both Google Maps and Leaflet maps
+
+### Logo Requirements
+
+- Place your logo at `assets/images/icon-logo.png`
+- Recommended size: 28x28 pixels or larger (will be scaled down)
+- PNG format recommended for transparency support
+
 ## Compatibility
 
 This change maintains backward compatibility with existing code that uses the helper functions, but now uses the proper WordPress taxonomy system under the hood.

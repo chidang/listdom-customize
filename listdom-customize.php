@@ -40,6 +40,9 @@ class CustomizeListdom {
         add_action('add_meta_boxes', function() {
             remove_meta_box('lsd_metabox_category', 'listdom-listing', 'side'); 
         }, 99);
+        
+        // Override map marker to use custom logo
+        add_filter('lsd_marker', array($this, 'custom_map_marker'), 10, 2);
     }
     
     /**
@@ -219,6 +222,21 @@ class CustomizeListdom {
     function display_listdom_categories($post_id = null, $separator = ', ') {
         $category_names = get_listdom_category_names($post_id);
         return implode($separator, $category_names);
+    }
+
+    /**
+     * Custom map marker using logo
+     */
+    public function custom_map_marker($marker, $listing) {
+        // Get the logo URL
+        $logo_url = CUSTOMIZE_UI_PLUGIN_URL . 'assets/images/icon-logo.png';
+        
+        // Create custom marker with logo
+        $custom_marker = '<div class="lsd-marker-container" style="background-color: #ffffff;">
+            <img src="' . esc_url($logo_url) . '" class="lsd-image-icon" alt="Logo">
+        </div>';
+        
+        return $custom_marker;
     }
 }
 

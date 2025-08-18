@@ -1,0 +1,44 @@
+/* Custom Map Marker Logo Styles */
+
+/* Ensure the logo image displays properly in map markers */
+.lsd-marker-container img.lsd-image-icon {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    position: absolute !important;
+    left: 6px !important;
+    top: 6px !important;
+    z-index: 10 !important;
+    transform: rotate(45deg) !important;
+    object-fit: cover !important;
+    background-color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+}
+
+/* Ensure the marker container has proper styling */
+.lsd-marker-container {
+    background-color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* Remove the default white circle background */
+.lsd-marker-container:after {
+    display: none !important;
+}
+
+/* Ensure proper positioning for both Google Maps and Leaflet */
+.lsd-listing-googlemap .lsd-marker-container img.lsd-image-icon,
+.lsd-listing-leaflet .lsd-marker-container img.lsd-image-icon {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    position: absolute !important;
+    left: 6px !important;
+    top: 6px !important;
+    z-index: 10 !important;
+    transform: rotate(45deg) !important;
+    object-fit: cover !important;
+    background-color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+}
