@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Customize UI - Select2 for Categories
+ * Plugin Name: Customize Listdom
  * Plugin URI: https://example.com/customize-ui
  * Description: Applies Select2 to elements with class "listdom-category" in the frontend
  * Version: 1.0.0
@@ -22,14 +22,14 @@ define('CUSTOMIZE_UI_PLUGIN_PATH', plugin_dir_path(__FILE__));
 /**
  * Main plugin class
  */
-class CustomizeUI {
+class CustomizeListdom {
     
     /**
      * Constructor
      */
     public function __construct() {
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        add_action('wp_footer', array($this, 'add_script'));
+        // add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+        // add_action('wp_footer', array($this, 'add_script'));
         add_filter('gettext', array($this, 'custom_translations'), 20, 3);
         
         // Admin functionality for multiple categories
@@ -300,4 +300,4 @@ class CustomizeUI {
     }
     
     // Initialize the plugin
-    new CustomizeUI();
+    new CustomizeListdom();
