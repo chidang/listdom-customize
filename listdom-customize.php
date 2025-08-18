@@ -36,6 +36,10 @@ class CustomizeListdom {
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
         add_action('add_meta_boxes', array($this, 'add_listdom_category_meta_box'));
         add_action('save_post', array($this, 'save_listdom_categories'));
+
+        add_action('add_meta_boxes', function() {
+            remove_meta_box('lsd_metabox_category', 'listdom-listing', 'side'); 
+        }, 99);
     }
     
     /**
@@ -43,32 +47,32 @@ class CustomizeListdom {
      */
     public function enqueue_scripts() {
         // Enqueue Select2 CSS
-        wp_enqueue_style(
-            'select2-css',
-            'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
-            array(),
-            '4.1.0'
-        );
+        // wp_enqueue_style(
+        //     'select2-css',
+        //     'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+        //     array(),
+        //     '4.1.0'
+        // );
         
         // Enqueue custom CSS
-        wp_enqueue_style(
-            'customize-ui-css',
-            CUSTOMIZE_UI_PLUGIN_URL . 'assets/css/customize-ui.css',
-            array('select2-css'),
-            CUSTOMIZE_UI_VERSION
-        );
+        // wp_enqueue_style(
+        //     'customize-ui-css',
+        //     CUSTOMIZE_UI_PLUGIN_URL . 'assets/css/customize-ui.css',
+        //     array('select2-css'),
+        //     CUSTOMIZE_UI_VERSION
+        // );
         
         // Enqueue jQuery (if not already loaded)
-        wp_enqueue_script('jquery');
+        // wp_enqueue_script('jquery');
         
         // Enqueue Select2 JS
-        wp_enqueue_script(
-            'select2-js',
-            'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-            array('jquery'),
-            '4.1.0',
-            true
-        );
+        // wp_enqueue_script(
+        //     'select2-js',
+        //     'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+        //     array('jquery'),
+        //     '4.1.0',
+        //     true
+        // );
     }
     
     /**
@@ -195,13 +199,10 @@ class CustomizeListdom {
         // Add nonce for security
         wp_nonce_field('save_listdom_categories', 'listdom_categories_nonce');
         
-        // Get existing categories
-        $existing_categories = get_post_meta($post->ID, '_listdom_categories', true);
-        if (!is_array($existing_categories)) {
-            $existing_categories = array();
-        }
+        // Get existing categories using WordPress taxonomy
+        $existing_categories = wp_get_object_terms($post->ID, 'listdom-category', array('fields' => 'ids'));
         
-        // Get all available categories (you may need to adjust this based on your taxonomy)
+        // Get all available categories from the existing listdom-category taxonomy
         $categories = get_terms(array(
             'taxonomy' => 'listdom-category',
             'hide_empty' => false,
@@ -239,19 +240,14 @@ class CustomizeListdom {
             return;
         }
         
-        // Save categories
+        // Save categories using WordPress taxonomy
         if (isset($_POST['listdom_categories']) && is_array($_POST['listdom_categories'])) {
             $categories = array_map('intval', $_POST['listdom_categories']);
-            update_post_meta($post_id, '_listdom_categories', $categories);
-            
-            // Also set the terms for the taxonomy (if using WordPress taxonomy)
             wp_set_object_terms($post_id, $categories, 'listdom-category');
         } else {
-            // If no categories selected, save empty array
-            update_post_meta($post_id, '_listdom_categories', array());
+            // If no categories selected, set empty array
             wp_set_object_terms($post_id, array(), 'listdom-category');
         }
-            }
     }
     
     /**
@@ -262,9 +258,11 @@ class CustomizeListdom {
             $post_id = get_the_ID();
         }
         
-        $categories = get_post_meta($post_id, '_listdom_categories', true);
-        if (!is_array($categories)) {
-            $categories = array();
+        // Get categories using WordPress taxonomy
+        $categories = wp_get_object_terms($post_id, 'listdom-category', array('fields' => 'ids'));
+        
+        if (is_wp_error($categories)) {
+            return array();
         }
         
         return $categories;
@@ -278,17 +276,14 @@ class CustomizeListdom {
             $post_id = get_the_ID();
         }
         
-        $category_ids = get_listdom_categories($post_id);
-        $category_names = array();
+        // Get categories using WordPress taxonomy
+        $categories = wp_get_object_terms($post_id, 'listdom-category', array('fields' => 'names'));
         
-        foreach ($category_ids as $category_id) {
-            $term = get_term($category_id, 'listdom-category');
-            if ($term && !is_wp_error($term)) {
-                $category_names[] = $term->name;
-            }
+        if (is_wp_error($categories)) {
+            return array();
         }
         
-        return $category_names;
+        return $categories;
     }
     
     /**
@@ -298,6 +293,10 @@ class CustomizeListdom {
         $category_names = get_listdom_category_names($post_id);
         return implode($separator, $category_names);
     }
-    
-    // Initialize the plugin
-    new CustomizeListdom();
+}
+
+// Initialize the plugin
+new CustomizeListdom();
+
+// Include migration script
+require_once CUSTOMIZE_UI_PLUGIN_PATH . 'migrate-categories.php';
