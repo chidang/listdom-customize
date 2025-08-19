@@ -62,6 +62,22 @@ echo display_listdom_categories($post_id, ', ');
 
 The admin interface remains the same - you can still select multiple categories using the Select2 dropdown in the meta box on listdom-listing posts.
 
+## Auto-Search Functionality
+
+The plugin automatically triggers search when category selection changes:
+
+- **Admin**: When categories are selected/deselected in the admin meta box, search is automatically triggered
+- **Frontend**: When users change category selection on the frontend, search is automatically triggered
+- **Dynamic Content**: Works with dynamically loaded content and Select2 dropdowns
+- **Multiple Search Buttons**: Automatically finds and triggers the appropriate search button
+
+### How It Works
+
+1. **Event Detection**: Monitors changes to elements with class `.listdom-category`
+2. **Search Button Detection**: Automatically finds search buttons using various selectors
+3. **Auto-Trigger**: Triggers the search button click event after a small delay
+4. **Cross-Platform**: Works with both regular select elements and Select2 dropdowns
+
 ## Map Marker Customization
 
 The plugin also customizes map markers to use your logo instead of category icons:

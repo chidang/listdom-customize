@@ -1,3 +1,19 @@
+/* Custom Pagination Styles */
+body .lsd-listing-googlemap .lsd-marker-container img.lsd-image-icon {
+    left: 3px !important;
+}
+
+body {
+    --listdom-pagination-button-hover-bg: #42633c;
+    --listdom-pagination-button-border-color: #42633c;
+    --listdom-pagination-button-border-hover-color: #42633c;
+    --listdom-pagination-button-text: #42633c;
+    --listdom-pagination-button-bg: #42633c21;
+}
+
+/* Custom Pagination Styles */
+
+
 /* Custom Map Marker Logo Styles */
 
 /* Ensure the logo image displays properly in map markers */

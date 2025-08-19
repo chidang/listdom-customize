@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: Customize Listdom
- * Plugin URI: https://example.com/customize-ui
- * Description: Applies Select2 to elements with class "listdom-category" in the frontend
- * Version: 1.0.0
- * Author: Your Name
+ * Plugin URI: https://www.upwork.com/freelancers/~01dc1dadb8aafe834b
+ * Description: Customize Listdom plugin: map, map marker, category, pagination, etc.
+ * Version: 1.0.2
+ * Author: Chi Dang
  * License: GPL v2 or later
- * Text Domain: customize-ui
+ * Text Domain: listdom-customize
  */
 
 // Prevent direct access
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('CUSTOMIZE_UI_VERSION', '1.0.0');
+define('CUSTOMIZE_UI_VERSION', '1.0.2');
 define('CUSTOMIZE_UI_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('CUSTOMIZE_UI_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -28,8 +28,7 @@ class CustomizeListdom {
      * Constructor
      */
     public function __construct() {
-        // add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        // add_action('wp_footer', array($this, 'add_script'));
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_filter('gettext', array($this, 'custom_translations'), 20, 3);
         
         // Admin functionality for multiple categories
@@ -43,6 +42,31 @@ class CustomizeListdom {
         
         // Override map marker to use custom logo
         add_filter('lsd_marker', array($this, 'custom_map_marker'), 10, 2);
+    }
+    
+    /**
+     * Enqueue frontend scripts and styles
+     */
+    public function enqueue_scripts() {
+        // Enqueue jQuery (if not already loaded)
+        wp_enqueue_script('jquery');
+        
+        // Enqueue custom CSS
+        wp_enqueue_style(
+            'customize-ui-css',
+            CUSTOMIZE_UI_PLUGIN_URL . 'assets/css/customize-ui.css',
+            array(),
+            CUSTOMIZE_UI_VERSION
+        );
+        
+        // Enqueue frontend JavaScript
+        wp_enqueue_script(
+            'customize-ui-frontend',
+            CUSTOMIZE_UI_PLUGIN_URL . 'assets/js/frontend.js',
+            array('jquery'),
+            CUSTOMIZE_UI_VERSION,
+            true
+        );
     }
     
     /**
@@ -242,6 +266,3 @@ class CustomizeListdom {
 
 // Initialize the plugin
 new CustomizeListdom();
-
-// Include migration script
-// require_once CUSTOMIZE_UI_PLUGIN_PATH . 'migrate-categories.php';
